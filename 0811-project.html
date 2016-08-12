@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>USA Population Density</title>
+<style>
+    html, body, #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="https://js.arcgis.com/4.0/esri/css/main.css">
+<script src="https://js.arcgis.com/4.0/"></script>
+<script>
+require([
+"esri/Map",
+"esri/views/MapView",
+"esri/layers/FeatureLayer",
+"dojo/domReady!"
+], function(Map, MapView, FeatureLayer){
+    var map = new Map({
+        basemap: "streets"
+    });
+    var view = new MapView({
+        container: "viewDiv",
+        map : map,
+        zoom: 4,
+        center: [-98, 40]
+    });
+    var template = {
+        title: "City",
+        content: "Name: {NAME} <br> # Of people between 30-39: {AGE_30_39} <br> # Of households: {HOUSEHOLDS}, Avg Household Size: {AVE_HH_SZ}"
+    };
+    var popDensity = new FeatureLayer({
+        url: "http://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_Major_Cities/FeatureServer/0",
+        outFields: ["NAME", "AGE_30_39", "HOUSEHOLDS", "AVE_HH_SZ"],
+        popupTemplate: template
+    });
+    map.add(popDensity);
+});
+</script>
+</head>
+<body>
+<div id="viewDiv"></div>
+</body>
+</html>
